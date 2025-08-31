@@ -104,8 +104,7 @@ function draw() {
   t++;
   render();
 
-  if (t < 100) return;
-  if (t > 105 && t < 107) return;
+  if (t > 400) PAUSED = false;
   if (PAUSED) return;
   collisions();
   data.whiteBall = move(data.whiteBall);
