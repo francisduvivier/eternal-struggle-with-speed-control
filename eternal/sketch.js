@@ -70,8 +70,6 @@ function bounceFromCircle(c, item, itemV) {
 }
 
 const data = {};
-let SPEED_FACTOR = 1
-
 function setup() {
   const canvas = createCanvas(400, 400);
   canvas.parent("sketch");
@@ -99,45 +97,18 @@ function setup() {
   const vB = createVector(0, 4);
   data.whiteBall = { x: CENTER.x, y: CENTER.y - MED_RADIUS, r: SMALL_RADIUS, v: vW };
   data.blackBall = { x: CENTER.x, y: CENTER.y + MED_RADIUS, r: SMALL_RADIUS, v: vB };
-
-  // --- speed slider binding ---
-  // try to find the slider in the DOM; if present, bind events
-  const slider = document.getElementById('speedSlider');
-  const label = document.getElementById('speedValue');
-  if (slider && label) {
-    const setFromSlider = () => {
-      const raw = Number(slider.value); // 0..100
-      SPEED_FACTOR = sliderToSpeed(raw);
-      // show rounded multiplier: use 1x for 1, otherwise show e.g. 10×
-      let display;
-      display = SPEED_FACTOR.toFixed(2) + '×';
-      label.textContent = display;
-      // try to nudge framerate for high speeds (best-effort)
-      const desired = Math.min(240, 30 * Math.log10(SPEED_FACTOR + 1));
-      if (desired > frameRate()) frameRate(desired);
-    }
-    // initialize
-    setFromSlider();
-    slider.addEventListener('input', setFromSlider);
-  }
 }
 
 let t = 0;
-
-function sliderToSpeed(v) {
-  return  2**v;
-}
-
 function draw() {
   t++;
   render();
 
   if (t > 400) PAUSED = false;
   if (PAUSED) return;
-  // update collisions and movement scaled by SPEED_FACTOR
   collisions();
-  data.whiteBall = move(data.whiteBall, SPEED_FACTOR);
-  data.blackBall = move(data.blackBall, SPEED_FACTOR);
+  data.whiteBall = move(data.whiteBall);
+  data.blackBall = move(data.blackBall);
   // if moved to0 much, move back into the border.
   if (dista(data.whiteBall, CENTER) > MAIN_RADIUS - SMALL_RADIUS) {
     const a = atan2((data.whiteBall.y - CENTER.y), data.whiteBall.x - CENTER.x);
@@ -257,12 +228,11 @@ function refillBorder(points) {
   return points;
 }
 
-function move(item, factor) {
-  // item.v holds the base velocity; scale by speedFactor to accelerate movement
+function move(item) {
   return {
     ...item,
-    x: item.x + item.v.x * (factor??1),
-    y: item.y + item.v.y * (factor??1),
+    x: item.x + item.v.x,
+    y: item.y + item.v.y,
   }
 }
 
