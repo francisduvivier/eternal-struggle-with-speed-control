@@ -97,19 +97,33 @@ function setup() {
   const vB = createVector(0, 4);
   data.whiteBall = { x: CENTER.x, y: CENTER.y - MED_RADIUS, r: SMALL_RADIUS, v: vW };
   data.blackBall = { x: CENTER.x, y: CENTER.y + MED_RADIUS, r: SMALL_RADIUS, v: vB };
+
+  // wire speed slider (log scale) -- modifies how many fixed physics ticks happen per frame
+  const slider = document.getElementById('speedSlider');
+  const speedDisplay = document.getElementById('speedValue');
+  function updateSpeedFromSlider() {
+    const v = Number(slider.value || 0); // -10..10
+    // map to 10^(v/10) so 0 -> 1×, -10 -> 0.1×, +10 -> 10× (log scale)
+    SPEED_MULTIPLIER = Math.pow(2, v);
+    if (speedDisplay) speedDisplay.textContent = SPEED_MULTIPLIER.toFixed(2) + '×';
+  }
+  if (slider) {
+    slider.addEventListener('input', updateSpeedFromSlider);
+    updateSpeedFromSlider();
+  }
 }
 
-let t = 0;
-function draw() {
-  t++;
-  render();
+let SIM_ACC = 0;
+let SPEED_MULTIPLIER = 1;
+const MAX_PHYS_STEPS = 12; // cap to avoid huge CPU spikes
 
-  if (t > 400) PAUSED = false;
-  if (PAUSED) return;
+function physicsStep() {
+  // one fixed physics tick (keeps per-step displacement constant to avoid tunneling)
   collisions();
   data.whiteBall = move(data.whiteBall);
   data.blackBall = move(data.blackBall);
-  // if moved to0 much, move back into the border.
+
+  // clamp balls inside main circle (same logic as before)
   if (dista(data.whiteBall, CENTER) > MAIN_RADIUS - SMALL_RADIUS) {
     const a = atan2((data.whiteBall.y - CENTER.y), data.whiteBall.x - CENTER.x);
     const newLoc = {
@@ -126,6 +140,26 @@ function draw() {
     }
     data.blackBall = { ...data.blackBall, ...newLoc };
   }
+}
+
+let t = 0;
+function draw() {
+  t++;
+  render();
+
+  if (t > 400) PAUSED = false;
+  if (PAUSED) return;
+
+  // accumulate simulated ticks based on the slider-controlled multiplier.
+  // We run an integer number of fixed physics steps per frame, capped by MAX_PHYS_STEPS.
+  SIM_ACC += SPEED_MULTIPLIER;
+  const stepsToRun = Math.min(Math.floor(SIM_ACC), MAX_PHYS_STEPS);
+  for (let i = 0; i < stepsToRun; i++) {
+    physicsStep();
+  }
+  SIM_ACC -= stepsToRun;
+  // prevent accumulator runaway if slider is extremely large
+  if (SIM_ACC > 1e6) SIM_ACC = SIM_ACC % 1;
 }
 
 function collisions() {
