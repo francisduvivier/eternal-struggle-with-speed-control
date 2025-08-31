@@ -1,22 +1,32 @@
-html, body {
+body {
   margin: 0;
   padding: 0;
   background-color: antiquewhite;
 }
 
+#main {
+  position: relative;
+}
+
+#theme {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
 canvas {
   display: block;
 }
+
 #sketch {
-    width: 400px;
-    height: 400px;
-    background-color: red;
-    
-    position: absolute;
-    top:0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    
-    margin: auto;
+  width: 400px;
+  height: 400px;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: auto;
 }

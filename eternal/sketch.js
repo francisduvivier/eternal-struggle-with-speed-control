@@ -4,9 +4,10 @@ const MED_RADIUS = 90;
 const SMALL_RADIUS = 25;
 let SHOW_POINTS = false;
 let PAUSED = true;
+let BACKGROUND_COLOR = "antiquewhite";
 
-function mousePressed() {
-  if (mouseX < 10 && mouseY < 10) SHOW_POINTS = !SHOW_POINTS;
+function keyPressed() {
+  if (key === 'p') SHOW_POINTS = !SHOW_POINTS;
 }
 
 function mouseMoved() {
@@ -237,7 +238,7 @@ function move(item) {
 }
 
 function render() {
-  background("antiquewhite");
+  background(BACKGROUND_COLOR);
 
   fill(0);
   strokeWeight(0);
