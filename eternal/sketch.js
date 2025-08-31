@@ -6,7 +6,7 @@ let SHOW_POINTS = false;
 let PAUSED = true;
 
 function mousePressed() {
-  SHOW_POINTS = !SHOW_POINTS;
+  if (mouseX < 10 && mouseY < 10) SHOW_POINTS = !SHOW_POINTS;
 }
 
 function mouseMoved() {
@@ -15,12 +15,12 @@ function mouseMoved() {
 
 // math
 function normalize(p1) {
-  const len = Math.sqrt(p1.x*p1.x + p1.y*p1.y);
-  return { ...p1, x : p1.x / len, y: p1.y / len };
+  const len = Math.sqrt(p1.x * p1.x + p1.y * p1.y);
+  return { ...p1, x: p1.x / len, y: p1.y / len };
 }
 
 function dot(p1, p2) {
-  return p1.x*p2.x + p1.y*p2.y;
+  return p1.x * p2.x + p1.y * p2.y;
 }
 
 function len(v) {
@@ -44,7 +44,7 @@ function distToLineSegment(item, p1, p2) {
   const l2 = dista(p1, p2) * dista(p1, p2);
   let t = dot(sub(item, p2), sub(p1, p2)) / l2;
   t = Math.max(0, Math.min(t, 1));
-  return dista(item, { x: p2.x - t*(p1.x - p2.x), y: p2.y - t*(p1.y - p2.y) })
+  return dista(item, { x: p2.x - t * (p1.x - p2.x), y: p2.y - t * (p1.y - p2.y) })
 }
 
 // shapes and physics
@@ -64,7 +64,7 @@ function bounceFromCircle(c, item, itemV) {
   const v = normalize(itemV);
   const projectedVelocity = dot(normal, v);
   //const newDir = { x: v.x - 2*projectedVelocity*normal.x, y: v.y - 2*projectedVelocity*normal.y };
-  const newDir = sub(v, mult(normal, 2*projectedVelocity));
+  const newDir = sub(v, mult(normal, 2 * projectedVelocity));
   return mult(newDir, len(itemV));
 }
 
@@ -75,8 +75,8 @@ function setup() {
   angleMode(DEGREES);
 
 
-  const blackBorder = arcOfPoints(CENTER.x, CENTER.y + MED_RADIUS, MED_RADIUS, 90, 90+180, 60);
-  const whiteBorder = arcOfPoints(CENTER.x, CENTER.y - MED_RADIUS, MED_RADIUS, 90, 90-180, 60);
+  const blackBorder = arcOfPoints(CENTER.x, CENTER.y + MED_RADIUS, MED_RADIUS, 90, 90 + 180, 60);
+  const whiteBorder = arcOfPoints(CENTER.x, CENTER.y - MED_RADIUS, MED_RADIUS, 90, 90 - 180, 60);
 
   // from bottom to top
   data.border = [
@@ -84,7 +84,7 @@ function setup() {
     ...whiteBorder,
   ];
   // from top to bottom
-  data.whiteOuter = arcOfPoints(CENTER.x, CENTER.y, MAIN_RADIUS, 270, 270+180, 60);
+  data.whiteOuter = arcOfPoints(CENTER.x, CENTER.y, MAIN_RADIUS, 270, 270 + 180, 60);
   // balls
   //const vW = createVector(2,3);
   //const vB = createAVector(2,3);
@@ -92,10 +92,10 @@ function setup() {
   //const vB = createVector(4,-2);
   //const vW = createVector(-4,0);
   //const vB = createVector(4,-0);
-  const vW = createVector(0,4);
-  const vB = createVector(0,4);
+  const vW = createVector(0, 4);
+  const vB = createVector(0, 4);
   data.whiteBall = { x: CENTER.x, y: CENTER.y - MED_RADIUS, r: SMALL_RADIUS, v: vW };
-  data.blackBall = { x: CENTER.x , y: CENTER.y + MED_RADIUS, r: SMALL_RADIUS, v: vB };
+  data.blackBall = { x: CENTER.x, y: CENTER.y + MED_RADIUS, r: SMALL_RADIUS, v: vB };
 }
 
 let t = 0;
@@ -111,7 +111,7 @@ function draw() {
   data.blackBall = move(data.blackBall);
   // if moved to0 much, move back into the border.
   if (dista(data.whiteBall, CENTER) > MAIN_RADIUS - SMALL_RADIUS) {
-    const a= atan2((data.whiteBall.y-CENTER.y), data.whiteBall.x-CENTER.x);
+    const a = atan2((data.whiteBall.y - CENTER.y), data.whiteBall.x - CENTER.x);
     const newLoc = {
       x: CENTER.x + cos(a) * (MAIN_RADIUS - SMALL_RADIUS - 1),
       y: CENTER.y + sin(a) * (MAIN_RADIUS - SMALL_RADIUS - 1),
@@ -119,7 +119,7 @@ function draw() {
     data.whiteBall = { ...data.whiteBall, ...newLoc };
   }
   if (dista(data.blackBall, CENTER) > MAIN_RADIUS - SMALL_RADIUS) {
-    const a= atan2((data.blackBall.y-CENTER.y), data.blackBall.x-CENTER.x);
+    const a = atan2((data.blackBall.y - CENTER.y), data.blackBall.x - CENTER.x);
     const newLoc = {
       x: CENTER.x + cos(a) * (MAIN_RADIUS - SMALL_RADIUS - 1),
       y: CENTER.y + sin(a) * (MAIN_RADIUS - SMALL_RADIUS - 1),
@@ -163,7 +163,7 @@ function collisions() {
     const newBorder = [];
     for (const p of data.border) {
       if (dista(p, movedBall) < SMALL_RADIUS - 4) {
-        let movedPoint = { ...p, x: p.x + (newV.x*1.5), y: p.y + (newV.y*1.5) }
+        let movedPoint = { ...p, x: p.x + (newV.x * 1.5), y: p.y + (newV.y * 1.5) }
         if (dista(movedPoint, CENTER) >= MAIN_RADIUS) movedPoint = p; // don't move.
         newBorder.push(movedPoint);
         hitPoints.push(p);
@@ -172,7 +172,7 @@ function collisions() {
         newBorder.push(p);
       }
     }
-    
+
     if (dista(movedBall, CENTER) >= MAIN_RADIUS - SMALL_RADIUS) {
       newV = bounceFromCircle(CENTER, movedBall, newV);
     } else if (hit) {
@@ -188,7 +188,7 @@ function collisions() {
 }
 
 function refillBorder(points) {
-  const distances = points.map((p, i) => i > 0 ? dista(p, points[i-1]) : dista(points[0], points[1]));
+  const distances = points.map((p, i) => i > 0 ? dista(p, points[i - 1]) : dista(points[0], points[1]));
   const maxD = max(distances);
   const minD = min(distances);
   //console.log("mm", minD, maxD);
@@ -241,21 +241,21 @@ function render() {
 
   fill(0);
   strokeWeight(0);
-  ellipse(CENTER.x, CENTER.y, MAIN_RADIUS*2, MAIN_RADIUS*2);
+  ellipse(CENTER.x, CENTER.y, MAIN_RADIUS * 2, MAIN_RADIUS * 2);
 
   fill(255);
   stroke(255);
 
   beginShape();
-  data.whiteOuter.forEach(({ x, y}) => vertex(x, y));
-  data.border.forEach(({ x, y}) => vertex(x, y));
+  data.whiteOuter.forEach(({ x, y }) => vertex(x, y));
+  data.border.forEach(({ x, y }) => vertex(x, y));
   endShape();
 
 
   if (SHOW_POINTS) {
     fill("red")
-    data.border.forEach(({ x, y}) => ellipse(x, y, 4, 4));
-    data.whiteOuter.forEach(({ x, y}) => ellipse(x, y, 4, 4));
+    data.border.forEach(({ x, y }) => ellipse(x, y, 4, 4));
+    data.whiteOuter.forEach(({ x, y }) => ellipse(x, y, 4, 4));
   }
 
 
