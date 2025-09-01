@@ -7,4 +7,5 @@ Fork of https://yoavg.github.io with speed control added to [please](https://new
 - Deepseek an Gemini 2.5 Pro for the [v2 version](docs/v2.html).
 
 ## Links
-- [Gemini Canvas](https://g.co/gemini/share/7056002e1481) Link for the [v2 version](docs/v2.html)
+- [Gemini Canvas](https://g.co/gemini/share/630c57e9eab5) Link for the [v2 version](docs/v2.html)
+d
