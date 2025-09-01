@@ -8,4 +8,3 @@ Fork of https://yoavg.github.io with speed control added to [please](https://new
 
 ## Links
 - [Gemini Canvas](https://g.co/gemini/share/630c57e9eab5) Link for the [v2 version](docs/v2.html)
-d
