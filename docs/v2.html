@@ -266,6 +266,45 @@
                 font-size: 1rem;
             }
         }
+        .color-picker-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .color-picker-container label {
+            font-weight: 500;
+            margin-right: 10px;
+        }
+
+        input[type="color"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: transparent;
+            padding: 0;
+        }
+
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+            border-radius: 8px;
+        }
+
+        input[type="color"]::-webkit-color-swatch {
+            border: 2px solid antiquewhite;
+            border-radius: 8px;
+        }
+
+        input[type="color"]::-moz-color-swatch {
+            border: 2px solid antiquewhite;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -303,6 +342,14 @@
             <button id="togglePoints">Toggle Points</button>
             <button id="themeButton">Change Theme</button>
             <button id="resetThemeButton">Reset Theme</button>
+            <div class="color-picker-container">
+                <label for="whiteColorPicker">White Side:</label>
+                <input type="color" id="whiteColorPicker" value="#FFFFFF">
+            </div>
+            <div class="color-picker-container">
+                <label for="blackColorPicker">Black Side:</label>
+                <input type="color" id="blackColorPicker" value="#000000">
+            </div>
         </div>
 
         <div class="control-group">
@@ -330,6 +377,8 @@
     let SHOW_POINTS = false;
     let PAUSED = true;
     let BACKGROUND_COLOR = "antiquewhite";
+    let whiteSideColor = "#FFFFFF";
+    let blackSideColor = "#000000";
     let SIMULATION_SPEED = 1.0;
     let INITIAL_VELOCITY = 4.0;
 
@@ -556,13 +605,13 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         // Draw main circle
-        ctx.fillStyle = "black";
+        ctx.fillStyle = blackSideColor;
         ctx.beginPath();
         ctx.arc(CENTER.x, CENTER.y, MAIN_RADIUS, 0, Math.PI * 2);
         ctx.fill();
 
         // Draw white area
-        ctx.fillStyle = "white";
+        ctx.fillStyle = whiteSideColor;
         ctx.beginPath();
 
         // Add white outer points
@@ -601,13 +650,13 @@
         }
 
         // Draw white ball
-        ctx.fillStyle = data.whiteBallColor || "white";
+        ctx.fillStyle = whiteSideColor;
         ctx.beginPath();
         ctx.arc(data.whiteBall.x, data.whiteBall.y, data.whiteBall.r, 0, Math.PI * 2);
         ctx.fill();
 
         // Draw black ball
-        ctx.fillStyle = data.blackBallColor || "black";
+        ctx.fillStyle = blackSideColor;
         ctx.beginPath();
         ctx.arc(data.blackBall.x, data.blackBall.y, data.blackBall.r, 0, Math.PI * 2);
         ctx.fill();
@@ -757,9 +806,12 @@
 
             BACKGROUND_COLOR = "antiquewhite";
 
-            // Reset ball colors
-            data.whiteBallColor = null;
-            data.blackBallColor = null;
+            // Reset ball and side colors
+            whiteSideColor = "#FFFFFF";
+            blackSideColor = "#000000";
+            document.getElementById('whiteColorPicker').value = "#FFFFFF";
+            document.getElementById('blackColorPicker').value = "#000000";
+
 
             // Reset UI colors
             document.querySelectorAll('.control-group').forEach(el => {
@@ -769,6 +821,15 @@
             document.querySelectorAll('button').forEach(btn => {
                 btn.style.background = '#4c4c9f';
             });
+        });
+
+        // Color Pickers
+        document.getElementById('whiteColorPicker').addEventListener('input', (e) => {
+            whiteSideColor = e.target.value;
+        });
+
+        document.getElementById('blackColorPicker').addEventListener('input', (e) => {
+            blackSideColor = e.target.value;
         });
 
         // Speed slider
@@ -829,4 +890,3 @@
 </script>
 </body>
 </html>
-
