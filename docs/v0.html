@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Eternal Struggle</title>
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+  <script src="libraries/p5.min.js"></script>
+  <script>
+    let current = 0;
+    const colors = [
+      ["antiquewhite", "#1c1c4f"],
+      ["#1c1c4f", "antiquewhite"],
+      ["white", "#1c1c4f"],
+      ["black", "antiquewhite"],
+      ["ghostwhite", "#1c1c4f"],
+      ["#1F1F1F", "antiquewhite"],
+    ]
+    function changeBackground() {
+      current++;
+      const [back, text] = colors[current % colors.length];
+      console.log(back, text);
+      BACKGROUND_COLOR = back;
+      document.body.style.background = back;
+      for (const a of document.getElementsByTagName("a")) {
+        a.style.color = text;
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <div id="sketch"></div>
+  <div id="main">
+    <div><a id="theme" href="#" onclick="changeBackground()">change background</a></div>
+    <div id="controls" style="margin-top:8px;">
+      <label for="speedSlider" style="color: inherit;">Speed (log): </label>
+      <input id="speedSlider" type="range" min="-3" max="6" value="0" />
+      <span id="speedValue" style="margin-left:8px;">1×</span>
+    </div>
+    <div><a href="v2.html">V2: More vibed up with config options and improvements!</a></div>
+  </div>
+  <script src="sketch.js"></script>
+</body>
+
+</html>
