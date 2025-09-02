@@ -1,5 +1,7 @@
 # About
-Fork of https://yoavg.github.io with speed control added to [please](https://news.ycombinator.com/item?id=45086666) [the Hacker New community](https://news.ycombinator.com/item?id=45086020).
+This repo contians the code for [Eternal Struggle - V2](https://francisduvivier.github.io/eternal-struggle-with-speed-control)
+
+This is a fork of https://github.com/yoavg/yoavg.github.io speed control added to [please](https://news.ycombinator.com/item?id=45086666) [the Hacker New community](https://news.ycombinator.com/item?id=45086020).
 
 ## Credits
 - [Original Repo](https://github.com/yoavg/yoavg.github.io) 
@@ -7,5 +9,5 @@ Fork of https://yoavg.github.io with speed control added to [please](https://new
 - Deepseek an Gemini 2.5 Pro for the [v2 version](docs/v2.html).
 
 ## Links
-- [Website: Eternal Struggle - V2](https://francisduvivier.github.io/eternal-struggle-with-speed-control)
+- [Original Website: Eternal Struggle](https://yoavg.github.io)
 - [Gemini Canvas](https://g.co/gemini/share/630c57e9eab5) Link for the [v2 version](docs/v2.html)
